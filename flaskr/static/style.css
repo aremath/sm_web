@@ -1,0 +1,73 @@
+/* SM World Rando CSS */
+
+body {
+    font: 14pt sans-serif;
+    color: #000;
+    background: #eee;
+    padding: 0pt;
+    margin: 0pt;
+    width: 100%;
+    height: 100%;
+    display: block;
+    text-align: center;
+}
+
+/* NAVBAR */
+ul.navbar {
+    list-style-type: none;
+}
+
+.active {
+    background-color: #a3a3a3;
+}
+
+
+/* DROPDOWN */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    /* overflow: hidden; */
+}
+
+.dropdown .dropbtn {
+    cursor: pointer;
+    font-size: 14pt;
+    border: none;
+    outline: none;
+    color: black;
+    padding: 14px 16px;
+    /* background-color: inherit; */
+    background-color: #99c2ff;
+    font-family: inherit;
+    margin: 0;
+}
+
+.dropdown .dropbtn:hover, .dropbtn:focus {
+    background-color: #66a3ff;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}

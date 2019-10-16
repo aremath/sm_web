@@ -7,4 +7,53 @@
 
     This is the rando page TODO
 </p>
+
+<div class="panel-group" id="settings-accordion-1" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <a title="Advanced" aria-controls="collapse-advanced" aria-expanded="false" href="#collapse-advanced" data-parent="#settings-accordion-1" data-toggle="collapse" class="panel-heading collapsed" id="heading1">
+            <span class="panel-title">Advanced</span>
+        </a>
+    </div>
+    <div aria-labelledby="heading1" role="tabpanel" class="panel-collapse collapse" id="collapse-advanced" aria-expanded="false">
+        <div class="panel-body">
+            <p>a</p>
+        </div>
+    </div>
+</div>
+
+<div class="accordion" id="settings-accordion">
+    <!-- Advanced Settings card -->
+    <div class="card">
+        <div class="card-header" id="advanced-header">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-advanced" aria-expanded="true" aria-controls="collapse-advanced">
+                    Advanced
+                </button>
+            </h2>
+        </div>
+        <div id="collapse-advanced" class="collapse" aria-labelledby="advanced-header" data-parent="#settings-accordion">
+            <div class="card-body">
+                a
+            </div>
+        </div>
+    </div>
+
+    <!-- Extras card -->
+    <div class="card">
+        <div class="card-header" id="extras-header">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-extras">
+                    Extras
+                </button>
+            </h2>
+        </div>
+        <div id="collapse-extras" class="collapse" data-parent="#settings-accordion">
+            <div class="card-body">
+                b
+            </div>
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}

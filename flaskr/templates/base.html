@@ -4,9 +4,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Door randomizer and world randomizer for Super Metroid!">
         <meta name="author" content="Aremath">
+        <!-- TODO - remove -->
+        <meta http-equiv="Pragma" content="no-cache">
         <!-- TODO -->
-        <link rel="icon" href="/favicon.ico">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <!-- <link rel="icon" href="/favicon.ico"> -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+        <link rel="stylesheet" href="../static/style.css">
         <title>
             Super Metroid World Randomizer
         </title>
@@ -64,9 +67,20 @@
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+
     <!-- /Main Content -->
+    <div class="dropdown">
+        <button class="dropbtn" aria-controls="dropcontent">Dropdown</button>
+        <div id="dropcontent" class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+        </div>
+    </div>
+
+    </body>
+
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    </body>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="../static/main.js"></script>
 </html>
