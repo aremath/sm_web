@@ -14,13 +14,16 @@
     This is the rando page TODO
 </p>
 
-<form>
+<form id="wr_settings">
     <fieldset>
         <legend>Starting Items:</legend>
         Presets:<br>
-        <button id="easy_preset"> Easy </button>
-        <button id="medium_preset"> Medium </button>
-        <button id="hard_preset"> Hard </button>
+        <select id="starting_preset">
+            <option value="choose" disabled selected hidden> choose </option>
+            <option value="easy"> Easy </option>
+            <option value="medium"> Medium </option>
+            <option value="hard"> Hard </option>
+        </select>
 
         <h3>Ammo:</h3>
         {% for a in ammo %}
@@ -52,9 +55,12 @@
         <legend>Placed Items:</legend>
         Ammo values are interpreted as a ratio of the remaining items after placing major items. The total number of items placed is 100. The majors slider affects EACH type of item. Items after that are in addition.<br>
         Presets:<br>
-        <button id="two_majors_preset"> Two Majors </button>
-        <button id="one_major_preset"> One Major </button>
-        <button id="missile_bonanza_preset"> Missile Bonanza </button> <br>
+        <select id="placing_preset">
+            <option value="choose" disabled selected hidden> choose </option>
+            <option value="two_majors"> Two Majors </option>
+            <option value="one_major"> One Major </option>
+            <option value="missile_bonanza"> Missile Bonanza </option>
+        </select>
 
         <h3>Majors:</h3>
             <div class="slidecontainer">
