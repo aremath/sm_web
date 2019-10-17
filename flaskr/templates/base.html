@@ -18,53 +18,34 @@
     </head>
 
     <body>
+        <!-- Navbar New -->
+        <div>
+        <ul class="navbar">
+            <li class="nav-item">
+                <a href="/" class="nav-main">Super Metroid World Randomizer</a>
+            </li>
+            <li class="nav-item {% block wr_isactive %}{% endblock %}">
+                <a href="/world_rando" class="nav-link">World Randomizer</a>
+            </li>
+            <li class="nav-item {% block rogue_isactive %}{% endblock %}">
+                <a href="/rogue" class="nav-link">Metroid Rogue</a>
+            </li>
+            <li class="nav-item-right dropdown">
+                <button class="dropbtn" aria-controls="helpcontent">
+                    Other Links
+                    <span class="caret"></span>
+                </button>
+                <div id="helpcontent" class="dropdown-content">
+                    <a href="https://www.github.com/aremath/sm_rando" class="dropdown-item">Github</a>
+                    <a href="/TODO" class="dropdown-item">Updates</a>
+                </div>
+            </li>
+            <li style="clear: both;"></li> <!-- Clear the floats -->
+        </ul>
+        </div>
 
-        <!-- Navbar -->
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container-fluid">
-                <!-- Navbar Header (collapse button and home link) -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar">
-                        <!-- The three lines -->
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <!-- Home -->
-                    <a class="navbar-brand" href="/">Super Metroid World Randomizer</a>
-                </div>
-                <!-- Collapsable Navbar -->
-                <div id="mynavbar" class="collapse navbar-collapse">
-                    <!-- Other Menus -->
-                    <ul class="nav navbar-nav {% block wr_isactive %}{% endblock %}">
-                        <li class="nav-item">
-                            <a href="/world_rando" class="nav-link">World Randomizer</a>
-                        </li>
-                        <li class="nav-item {% block rogue_isactive %}{% endblock %}">
-                            <a href="/rogue" class="nav-link">Metroid Rogue</a>
-                        </li>
-                    </ul>
-                    <!-- /Other Menus -->
-                    <!-- Help Menu is on the right -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                Help
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="https://www.github.com/aremath/sm_rando" class="dropdown-item">Github</a></li>
-                                <li><a href="/TODO" class="dropdown-item">Updates</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <!-- /Help Menu -->
-                </div>
-            </div>
-        </nav>
-        <!-- /Navbar -->
     <!-- Main Content -->
-    <div class="container">
+    <div class="container", style="clear: both; padding: 4px 20px" align="left">
         {% block content %}{% endblock %}
     </div>
 
@@ -83,4 +64,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <script src="../static/main.js"></script>
+    {% block extrascripts %}{% endblock %}
 </html>

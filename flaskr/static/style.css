@@ -3,7 +3,7 @@
 body {
     font: 14pt sans-serif;
     color: #000;
-    background: #eee;
+    background: #ffffff;
     padding: 0pt;
     margin: 0pt;
     width: 100%;
@@ -12,13 +12,87 @@ body {
     text-align: center;
 }
 
+/* SLIDERS */
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 70%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
 /* NAVBAR */
 ul.navbar {
     list-style-type: none;
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; */
+    background-color: #f8f8f8;
+}
+
+.nav-item {
+    float: left;
+}
+
+.nav-item-right {
+    float: right;
+}
+
+.nav-main{
+    display: inline-block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: #777777;
+}
+
+.nav-main:hover {
+    color: #000;
+}
+
+.nav-link {
+    font: 12pt sans-serif;
+    display: inline-block;
+    text-align: center;
+    padding: 14px 14px;
+    text-decoration: none;
+    color: #777777;
+}
+
+.nav-link:hover {
+    color: #000;
 }
 
 .active {
-    background-color: #a3a3a3;
+    background-color: #c3c3c3;
 }
 
 
@@ -26,7 +100,6 @@ ul.navbar {
 .dropdown {
     position: relative;
     display: inline-block;
-    /* overflow: hidden; */
 }
 
 .dropdown .dropbtn {

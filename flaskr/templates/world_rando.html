@@ -1,5 +1,11 @@
 {% extends "base.html" %}
+
 {% block wr_isactive %}active{% endblock %}
+
+{% block extrascripts %}
+<script src="../static/presets.js"></script>
+{% endblock %}
+
 {% block content %}
 <h2> Super Metroid World Randomizer </h2>
 <p>
@@ -8,51 +14,100 @@
     This is the rando page TODO
 </p>
 
-<div class="panel-group" id="settings-accordion-1" role="tablist" aria-multiselectable="true">
-    <div class="panel panel-default">
-        <a title="Advanced" aria-controls="collapse-advanced" aria-expanded="false" href="#collapse-advanced" data-parent="#settings-accordion-1" data-toggle="collapse" class="panel-heading collapsed" id="heading1">
-            <span class="panel-title">Advanced</span>
-        </a>
-    </div>
-    <div aria-labelledby="heading1" role="tabpanel" class="panel-collapse collapse" id="collapse-advanced" aria-expanded="false">
-        <div class="panel-body">
-            <p>a</p>
-        </div>
-    </div>
-</div>
+<form>
+    <fieldset>
+        <legend>Starting Items:</legend>
+        Presets:<br>
+        <button id="easy_preset"> Easy </button>
+        <button id="medium_preset"> Medium </button>
+        <button id="hard_preset"> Hard </button>
 
-<div class="accordion" id="settings-accordion">
-    <!-- Advanced Settings card -->
-    <div class="card">
-        <div class="card-header" id="advanced-header">
-            <h2 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-advanced" aria-expanded="true" aria-controls="collapse-advanced">
-                    Advanced
-                </button>
-            </h2>
-        </div>
-        <div id="collapse-advanced" class="collapse" aria-labelledby="advanced-header" data-parent="#settings-accordion">
-            <div class="card-body">
-                a
+        <h3>Ammo:</h3>
+        {% for a in ammo %}
+            {{a.name}}
+            <div class="slidecontainer">
+                <input type="range" min="{{a.min}}" max="{{a.max}}" value="{{a.min}}" class="slider" id="{{a.id}}" aria-controls="{{a.id}}val">
+                <span id="{{a.id}}val"></span>
             </div>
-        </div>
-    </div>
+        {% endfor %}
+        <h3>Beams:</h3>
+        {% for b in beams %}
+            <input type="checkbox" id="{{b.id}}">
+            {{b.name}}
+        {% endfor %}
+        <h3>Suits:</h3>
+        {% for s in suits %}
+            <input type="checkbox" id="{{s.id}}">
+            {{s.name}}
+        {% endfor %}
+        <h3>Items:</h3>
+        {% for i in items %}
+            <input type="checkbox" id="{{i.id}}">
+            {{i.name}}
+        {% endfor %}
 
-    <!-- Extras card -->
-    <div class="card">
-        <div class="card-header" id="extras-header">
-            <h2 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-extras">
-                    Extras
-                </button>
-            </h2>
-        </div>
-        <div id="collapse-extras" class="collapse" data-parent="#settings-accordion">
-            <div class="card-body">
-                b
+    </fieldset>
+
+    <fieldset>
+        <legend>Placed Items:</legend>
+        Ammo values are interpreted as a ratio of the remaining items after placing major items. The total number of items placed is 100. The majors slider affects EACH type of item. Items after that are in addition.<br>
+        Presets:<br>
+        <button id="two_majors_preset"> Two Majors </button>
+        <button id="one_major_preset"> One Major </button>
+        <button id="missile_bonanza_preset"> Missile Bonanza </button> <br>
+
+        <h3>Majors:</h3>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="4" value="1" class="slider" id="majors" aria-controls="majors_placeval">
+                <span id="majors_placeval"></span>
             </div>
+
+        <h3>Ammo:</h3>
+        {% for a in ammo %}
+            {{a.name}}
+            <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="1" class="slider" id="{{a.id}}place" aria-controls="{{a.id}}placeval">
+                <span id="{{a.id}}placeval"></span>
+            </div>
+        {% endfor %}
+
+        Reserve Tanks:
+        <div class="slidecontainer">
+        <input type="range" min="0" max="100" value="0" class="slider" id="reserveplace" aria-controls="reserveplaceval">
+        <span id="reserveplaceval"></span>
         </div>
-    </div>
+
+        <h3>Beams:</h3>
+        {% for b in beams %}
+            {{b.name}}
+            <div class="slidecontainer">
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{b.id}}place" aria-controls="{{b.id}}placeval">
+            <span id="{{b.id}}placeval"></span>
+            </div>
+        {% endfor %}
+        <h3>Suits:</h3>
+        {% for s in suits %}
+            {{s.name}}
+            <div class="slidecontainer">
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{s.id}}place" aria-controls="{{s.id}}placeval">
+            <span id="{{s.id}}placeval"></span>
+            </div>
+        {% endfor %}
+        <h3>Items:</h3>
+        {% for i in items %}
+            {{i.name}}
+            <div class="slidecontainer">
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{i.id}}place" aria-controls="{{i.id}}placeval">
+            <span id="{{i.id}}placeval"></span>
+            </div>
+        {% endfor %}
+
+    </fieldset>
+
+    Seed (optional):
+    <input type="text" name="seed"><br>
+    <input type="submit" value="Create!">
+</form>
 
 </div>
 

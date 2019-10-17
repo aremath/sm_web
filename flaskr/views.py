@@ -1,4 +1,5 @@
 from flask import render_template, Blueprint
+from . import config
 
 main_bp = Blueprint("main", __name__)
 
@@ -8,7 +9,7 @@ def main_view():
 
 @main_bp.route("/world_rando")
 def world_rando_view():
-    return render_template("world_rando.html")
+    return render_template("world_rando.html", ammo=config.ammo, beams=config.beams, suits=config.suits, items=config.items)
 
 @main_bp.route("/rogue")
 def rogue_view():
