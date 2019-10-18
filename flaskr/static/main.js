@@ -1,4 +1,33 @@
 
+
+// Accordions
+accordions = document.getElementsByClassName("accordion")
+for (let accordion of accordions) {
+    accordion.addEventListener("click", function () {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+    accordion.onclick = function () {
+        return false;
+    }
+}
+
+// Prevent formsubmit using Enter
+document.getElementById("wr_settings").onkeypress = function (e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key == 13) {
+        e.preventDefault();
+    }
+}
+
+
+// Filter for textboxes:
+// only accept some input values
 var event_types = ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"];
 
 function set_input_filter(element, filter) {
@@ -18,19 +47,19 @@ function set_input_filter(element, filter) {
 
 var intinputs = document.getElementsByClassName("intinput");
 
+// Set the value of the corresponding slider
 function intinput_handler(e) {
     var target_element = e.target.getAttribute("aria-controls");
     var theslider = document.getElementById(target_element);
     theslider.value = e.target.value
 }
 
+// Apply the filter and the handler
 for (let intinput of intinputs) {
     set_input_filter(intinput, function(value) {
         return /^\d*$/.test(value) && (value === "" || (parseInt(value) >= intinput.min && parseInt(value) <= intinput.max)); });
     intinput.onchange = intinput_handler;
 }
-
-// Make intboxes only allow ints
 
 // Handles sliders by usting the aria-controls attribut to find the
 // counter to update
