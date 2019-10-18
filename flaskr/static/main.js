@@ -1,9 +1,43 @@
+
+var event_types = ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"];
+
+function set_input_filter(element, filter) {
+    event_types.forEach(function (event) {
+        element.addEventListener(event, function () {
+            if (filter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            }
+        });
+    });
+}
+
+var intinputs = document.getElementsByClassName("intinput");
+
+function intinput_handler(e) {
+    var target_element = e.target.getAttribute("aria-controls");
+    var theslider = document.getElementById(target_element);
+    theslider.value = e.target.value
+}
+
+for (let intinput of intinputs) {
+    set_input_filter(intinput, function(value) {
+        return /^\d*$/.test(value) && (value === "" || (parseInt(value) >= intinput.min && parseInt(value) <= intinput.max)); });
+    intinput.onchange = intinput_handler;
+}
+
+// Make intboxes only allow ints
+
 // Handles sliders by usting the aria-controls attribut to find the
 // counter to update
 function slider_handler(e) {
     var target_element = e.target.getAttribute("aria-controls");
     var thespan = document.getElementById(target_element);
-    thespan.innerHTML = e.target.value;
+    thespan.value = e.target.value;
 }
 
 // Add it as a listener to the appropriate elements
@@ -13,7 +47,7 @@ for (let slider of sliders) {
     // Set up initial state
     var target_element = slider.getAttribute("aria-controls");
     thespan = document.getElementById(target_element);
-    thespan.innerHTML = slider.value;
+    thespan.value = slider.value;
 }
 
 // Handles dropdowns by using the aria-controls attribute to find the

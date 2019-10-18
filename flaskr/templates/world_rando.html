@@ -29,8 +29,8 @@
         {% for a in ammo %}
             {{a.name}}
             <div class="slidecontainer">
-                <input type="range" min="{{a.min}}" max="{{a.max}}" value="{{a.min}}" class="slider" id="{{a.id}}" aria-controls="{{a.id}}val">
-                <span id="{{a.id}}val"></span>
+                <input type="range" min="{{a.min}}" max="{{a.max}}" value="{{a.min}}" class="slider" id="{{a.id}}" aria-controls="{{a.id}}input">
+                <input type="text" id="{{a.id}}input" class="intinput" min="{{a.min}}" max="{{a.max}}" aria-controls="{{a.id}}">
             </div>
         {% endfor %}
         <h3>Beams:</h3>
@@ -64,47 +64,48 @@
 
         <h3>Majors:</h3>
             <div class="slidecontainer">
-                <input type="range" min="1" max="4" value="1" class="slider" id="majors" aria-controls="majors_placeval">
+                <input type="range" min="1" max="4" value="1" class="slider" id="majors" aria-controls="majorsplaceinput">
                 <span id="majors_placeval"></span>
+                <input type="text" id="majorsplaceinput" class="intinput" min="1" max="4" aria-controls="majors">
             </div>
 
         <h3>Ammo:</h3>
         {% for a in ammo %}
             {{a.name}}
             <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="1" class="slider" id="{{a.id}}place" aria-controls="{{a.id}}placeval">
-                <span id="{{a.id}}placeval"></span>
+                <input type="range" min="1" max="100" value="1" class="slider" id="{{a.id}}place" aria-controls="{{a.id}}placeinput">
+                <input type="text" id="{{a.id}}placeinput" class="intinput" min="1" max="100" aria-controls="{{a.id}}place">
             </div>
         {% endfor %}
 
         Reserve Tanks:
         <div class="slidecontainer">
-        <input type="range" min="0" max="100" value="0" class="slider" id="reserveplace" aria-controls="reserveplaceval">
-        <span id="reserveplaceval"></span>
+        <input type="range" min="0" max="100" value="0" class="slider" id="reserveplace" aria-controls="reserveplaceinput">
+        <input type="text" id="reserveplaceinput" class="intinput" min="0" max="100" aria-controls="reserveplace">
         </div>
 
         <h3>Beams:</h3>
         {% for b in beams %}
             {{b.name}}
             <div class="slidecontainer">
-            <input type="range" min="0" max="5" value="0" class="slider" id="{{b.id}}place" aria-controls="{{b.id}}placeval">
-            <span id="{{b.id}}placeval"></span>
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{b.id}}place" aria-controls="{{b.id}}placeinput">
+            <input type="text" id="{{b.id}}placeinput" class="intinput" min="0" max="5" aria-controls="{{b.id}}place">
             </div>
         {% endfor %}
         <h3>Suits:</h3>
         {% for s in suits %}
             {{s.name}}
             <div class="slidecontainer">
-            <input type="range" min="0" max="5" value="0" class="slider" id="{{s.id}}place" aria-controls="{{s.id}}placeval">
-            <span id="{{s.id}}placeval"></span>
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{s.id}}place" aria-controls="{{s.id}}placeinput">
+            <input type="text" id="{{s.id}}placeinput" class="intinput" min="0" max="5" aria-controls="{{s.id}}place">
             </div>
         {% endfor %}
         <h3>Items:</h3>
         {% for i in items %}
             {{i.name}}
             <div class="slidecontainer">
-            <input type="range" min="0" max="5" value="0" class="slider" id="{{i.id}}place" aria-controls="{{i.id}}placeval">
-            <span id="{{i.id}}placeval"></span>
+            <input type="range" min="0" max="5" value="0" class="slider" id="{{i.id}}place" aria-controls="{{i.id}}placeinput">
+            <input type="text" id="{{i.id}}placeinput" class="intinput" min="0" max="5" aria-controls="{{i.id}}place">
             </div>
         {% endfor %}
 

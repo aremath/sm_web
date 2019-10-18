@@ -33,7 +33,7 @@ preset_start = function (set_ammos, set_beams, set_suits, set_items) {
         // update the counter as well
         var a_target = a.getAttribute("aria-controls");
         var thespan = document.getElementById(a_target);
-        thespan.innerHTML = a.value;
+        thespan.value = a.value;
     }
     // Set the checkboxes
     other_things = beams.concat(suits, items)
@@ -83,7 +83,7 @@ preset_place = function(place_majors, place_ammos, place_beams, place_suits, pla
     m.value = place_majors
     var m_target = m.getAttribute("aria-controls");
     var thespan = document.getElementById(m_target);
-    thespan.innerHTML = m.value;
+    thespan.value = m.value;
 
     ammos_r = ammos.concat(["reserve"])
     var all = ammos_r.concat(beams, suits, items)
@@ -96,7 +96,7 @@ preset_place = function(place_majors, place_ammos, place_beams, place_suits, pla
         // update the counter as well
         var a_target = a.getAttribute("aria-controls");
         thespan = document.getElementById(a_target);
-        thespan.innerHTML = a.value;
+        thespan.value = a.value;
     }
 }
 
