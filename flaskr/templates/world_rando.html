@@ -14,7 +14,7 @@
     This is the rando page TODO
 </p>
 
-<form id="wr_settings" action="/world_rando/create" method="POST">
+<form id="wr_settings" action="/world_rando/create" method="POST" enctype="multipart/form-data">
     <fieldset>
         <legend>Starting Items:</legend>
         Presets:<br>
@@ -120,6 +120,8 @@
         </div>
 
     </fieldset>
+    ROM (Super Metroid Japanese Unheadered):
+    <input type="file" name="ROM">
 
     Seed (optional):
     <input type="text" name="seed"><br>

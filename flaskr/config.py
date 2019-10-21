@@ -2,7 +2,7 @@
 # For defining the items and how should be created in the HTML template.
 energy_tanks = {
         "name"  : "Energy Tanks:",
-        "min"   : "1",
+        "min"   : "0",
         "max"   : "10",
         "id"    : "etanks"
         }
