@@ -1,5 +1,17 @@
-import os, math
+# Python imports
+import os, math, tempfile, json, signal, shutil, time
+# Flask imports
 from werkzeug.utils import secure_filename
+# Personal imports
+# Install github.com/aremath/sm_rando somewhere, then add to PYTHONPATH env variable
+from sm_rando import door_rando_main
+
+
+class TimeoutError(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutError
 
 num_items = {
         "etanks":   (100, "E"),
@@ -25,6 +37,8 @@ check_items = {
         "grapple":          "G",
         "xray":             "XR",
         }
+
+# TRANSLATION
 
 def mk_starting_items(request):
     start = ""
@@ -110,7 +124,10 @@ def mk_item_ratio(item_ratios, n_items):
     # Now put them together
     out = {}
     for k in item_ratios.keys():
-        out[k] = int_vals[k] + rounded_vals[k]
+        r_k = 0
+        if k in rounded_vals:
+            r_k = rounded_vals[k]
+        out[k] = int_vals[k] + r_k
     return out
 
 def mk_settings_from_request(request):
@@ -118,10 +135,76 @@ def mk_settings_from_request(request):
     item_placement = mk_item_placement(request)
     return starting_items, item_placement
 
-def handle_valid_rom(rom, request):
-    starting_items, item_placement = mk_settings_from_request(request)
-    print(starting_items)
-    print(item_placement)
+def setup_valid_rom(rom, request):
     save_name = secure_filename(rom.filename)
-    #rom.save(os.path.join())
+    save_folder = tempfile.mkdtemp()
+    # Save the rom to the work directory
+    rom.save(os.path.join(save_folder, save_name))
+    return save_folder, save_name
+
+def handle_valid_rom(form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
+    # Increment the number of threads
+    if db is not None:
+        db.execute("UPDATE requests SET value = value + 1 WHERE key = \"n\"")
+
+    error = None
+
+    # Work part
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(work_timeout)
+    try:
+        starting_items, item_placement = mk_settings_from_request(form)
+        # Save the settings to the work directory
+        settings_dir = os.path.join(save_folder, "settings")
+        os.mkdir(settings_dir)
+        with open(os.path.join(save_folder, "settings", "items.set"), "w") as setfile:
+            json.dump(item_placement, setfile)
+
+        os.mkdir(os.path.join(save_folder, "output"))
+        args = [
+                "--clean", os.path.join(save_folder, save_name),
+                "--create", os.path.join(save_folder, "output", "rando_rom.smc"),
+                "--graph",
+                "--completable",
+                "--starting_items", starting_items,
+                "--settings", settings_dir,
+                ]
+        # Add a seed if specified
+        seed = form["seed"]
+        if seed != "":
+            args.extend(["--seed", seed])
+        #TODO: actually call the thing
+        door_rando.main(args)
+    except TimeoutError:
+        error = "Timed Out"
+    except AssertionError:
+        error = "Asserted"
+    #except Exception as e:
+    #    print(e)
+    #    error = "Unknown Error"
+
+    # Wait part
+    if error is None:
+        # Create done.txt
+        d_path = os.path.join(save_folder, "done.txt")
+        with open(d_path, "w") as f:
+            json.dump(output, f)
+        # Wait for the wait timeout
+        time.sleep(wait_timeout)
+    else:
+        print(error)
+        # Create error.txt
+        e_path = os.path.join(save_folder, "error.txt")
+        with open(e_path, "w") as f:
+            f.write(error)
+        time.sleep(err_timeout)
+    
+    # Clean up
+    # Delete the directory
+    shutil.rmtree(save_folder)
+    # Decrement the number of threads
+    if db is not None:
+        db.execute("UPDATE requests SET value = value - 1 WHERE key = \"n\"")
+    return
+
 

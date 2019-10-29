@@ -1,6 +1,13 @@
-from flask import render_template, Blueprint, request
+# Python imports
+import multiprocessing
+
+# Flask imports
+from flask import render_template, Blueprint, request, current_app, redirect, flash
+
+# Local imports
 from . import config
 from . import rom_interact
+from flaskr.database import get_db
 
 main_bp = Blueprint("main", __name__)
 
@@ -22,24 +29,46 @@ def allowed_file(filename, extensions):
 
 @main_bp.route("/world_rando/create", methods=["POST"])
 def create_view():
-    if request.method == "POST":
-        user_conf = request.form
-        print(request.files)
-        if "ROM" not in request.files:
-            #flash("No ROM")
-            print("No ROM")
-        rom = request.files["ROM"]
-        if rom.filename == "":
-            #flash("No ROM 2")
-            print("No ROM 2")
-        if rom and allowed_file(rom.filename, ROM_EXTENSIONS) and n_threads < MAX_THREADS:
-            # spawn a thread to take care of the request
-            # create a unique id to send to the website for download
-            # generate a seed
-            print(request.form)
-            print(rom.filename)
-            rom_interact.handle_valid_rom(rom, request.form)
-        return render_template("create.html")
+    error = None
+    # Error: Not a post request
+    if request.method != "POST":
+        return create_error("Not a POST")
+    user_conf = request.form
+    print(request.files)
+    # Error: They didn't upload a ROM
+    if "ROM" not in request.files:
+        return create_error("No ROM")
+    rom = request.files["ROM"]
+    # Error: They didn't give the ROM a filename
+    if rom.filename == "":
+        return create_error("No ROM Filename")
+    # Error: The ROM has a bad extension
+    if not allowed_file(rom.filename, ROM_EXTENSIONS):
+        return create_error("Bad ROM Extension")
+    # Check the number of threads
+    db = get_db()
+    n_threads = db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()
+    # Error: Too many threads are running
+    if int(n_threads[0]) >= current_app.config["MAX_THREADS"]:
+        return create_error("Server is too busy")
+    
+    # If we get here, no errors
+    print(request.form)
+    # First, set up the folder where we will process this request
+    save_folder, save_name = rom_interact.setup_valid_rom(rom, request.form)
+    print(save_folder)
+    # Now, spawn a new process to randomize the rom
+    work_t = current_app.config["WORK_TIME"]
+    wait_t = current_app.config["WAIT_TIME"]
+    err_t = current_app.config["ERR_TIME"]
+    p = multiprocessing.Process(target=rom_interact.handle_valid_rom,
+            args=(request.form, save_folder, save_name, db, work_t, wait_t, err_t))
+    # Finally, render the template
+    return render_template("create.html", folder=save_folder)
+
+def create_error(error):
+    flash(error)
+    return redirect(url_for("world_rando"))
 
 @main_bp.route("/rogue")
 def rogue_view():
