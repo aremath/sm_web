@@ -5,6 +5,9 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
             DATABASE = os.path.join(app.instance_path,"flaskr.sqlite"),
+            # Path to door rando
+            RANDO_PATH = "../../sm_rando/",
+            # Number of possible active threads
             MAX_THREADS = 20,
             # 3 minutes of work time
             WORK_TIME = 180,

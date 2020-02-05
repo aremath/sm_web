@@ -15,8 +15,9 @@
 </p>
 
 <form id="wr_settings" action="/world_rando/create" method="POST" enctype="multipart/form-data">
+
     <fieldset>
-        <legend>Starting Items:</legend>
+        <legend>Starting Items</legend>
         Presets:<br>
         <select id="starting_preset">
             <option value="choose" disabled selected hidden> choose </option>
@@ -57,7 +58,19 @@
     </fieldset>
 
     <fieldset>
-        <legend>Placed Items:</legend>
+        <legend>Misc:</legend>
+        <input type="checkbox" id="g8" name="g8"> Two Statues Rooms
+        <input type="checkbox" id="noescape" name="noescape"> No teleport during escape </br>
+        Logic Type:<br>
+        <select id="mode_preset", name="mode_preset">
+            <option value="easy" selected> Easy Logic </option>
+            <option value="hard"> Hard Logic </option>
+        </select>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Placed Items</legend>
         Presets:<br>
         <select id="placing_preset">
             <option value="choose" disabled selected hidden> choose </option>

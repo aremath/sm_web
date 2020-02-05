@@ -1,11 +1,9 @@
 # Python imports
-import os, math, tempfile, json, signal, shutil, time
+import os, math, tempfile, json, signal, shutil, time, subprocess, sys
 # Flask imports
 from werkzeug.utils import secure_filename
 # Personal imports
-# Install github.com/aremath/sm_rando somewhere, then add to PYTHONPATH env variable
-from sm_rando import door_rando_main
-
+# Install github.com/aremath/sm_rando somewhere
 
 class TimeoutError(Exception):
     pass
@@ -142,10 +140,19 @@ def setup_valid_rom(rom, request):
     rom.save(os.path.join(save_folder, save_name))
     return save_folder, save_name
 
-def handle_valid_rom(form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
+def handle_valid_rom(rando_path, form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
+    logfile = os.path.join(save_folder, "logfile")
+    # Hijack stdout for output
+    sys.stdout = open(logfile, "w")
+
     # Increment the number of threads
     if db is not None:
+        #n_threads = int(db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()[0])
+        #print("T-N Threads: {}".format(n_threads))
         db.execute("UPDATE requests SET value = value + 1 WHERE key = \"n\"")
+        db.commit()
+        #n_threads = int(db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()[0])
+        #print("T-N Threads: {}".format(n_threads))
 
     error = None
 
@@ -168,13 +175,26 @@ def handle_valid_rom(form, save_folder, save_name, db, work_timeout, wait_timeou
                 "--completable",
                 "--starting_items", starting_items,
                 "--settings", settings_dir,
+                "--logfile", logfile
                 ]
-        # Add a seed if specified
+        # Add other miscellanious flags
         seed = form["seed"]
         if seed != "":
             args.extend(["--seed", seed])
-        #TODO: actually call the thing
-        door_rando.main(args)
+        if form["mode_preset"] == "hard":
+            args.append("--hard_mode")
+        if "noescape" in form:
+            args.append("--noescape")
+        if "g8" in form:
+            args.append("--g8")
+        # Actually call the thing
+        #TODO: in the future, update directory structure to be able to import this file
+        command = ["python3", "door_rando_main.py"] + args
+        print(command)
+        #TODO: timeout?
+        returncode = subprocess.call(command, cwd=rando_path)
+        if returncode < 0:
+            error = "Shell error number {}".format(a)
     except TimeoutError:
         error = "Timed Out"
     except AssertionError:
@@ -187,12 +207,15 @@ def handle_valid_rom(form, save_folder, save_name, db, work_timeout, wait_timeou
     if error is None:
         # Create done.txt
         d_path = os.path.join(save_folder, "done.txt")
+        # Zip the directory
+        shutil.make_archive(os.path.join(save_folder, "rando"), "zip", os.path.join(save_folder, "output"))
         with open(d_path, "w") as f:
-            json.dump(output, f)
+            f.write("DONE")
+            #json.dump(output, f)
         # Wait for the wait timeout
         time.sleep(wait_timeout)
     else:
-        print(error)
+        print("Error: {}".format(error))
         # Create error.txt
         e_path = os.path.join(save_folder, "error.txt")
         with open(e_path, "w") as f:
@@ -205,6 +228,7 @@ def handle_valid_rom(form, save_folder, save_name, db, work_timeout, wait_timeou
     # Decrement the number of threads
     if db is not None:
         db.execute("UPDATE requests SET value = value - 1 WHERE key = \"n\"")
+        db.commit()
     return
 
 

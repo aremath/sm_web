@@ -31,7 +31,10 @@ form = {
     "hi_jumpplace":     "0",
     "grappleplace":     "0",
     "xrayplace":        "0",
-    "seed":             ""
+    "seed":             "",
+    "noescape":         "",
+    "g8":               "",
+    "hard_mode":        ""
     }
 
 rom = "/mnt/d/Ross/Programming/sm door rando/roms/sm_clean.smc"
@@ -42,8 +45,9 @@ def main():
     save_folder = tempfile.mkdtemp()
     save_name = os.path.join(save_folder, "ayy.smc")
     shutil.copyfile(rom, save_name)
+    rpath = "../../sm_rando/"
     # Do the thing
-    rom_interact.handle_valid_rom(fake_form, save_folder, save_name, None, 180, 60, 60)
+    rom_interact.handle_valid_rom(rpath, fake_form, save_folder, save_name, None, 180, 60, 60)
     return
 
 if __name__ == "__main__":

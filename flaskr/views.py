@@ -12,8 +12,6 @@ from flaskr.database import get_db
 main_bp = Blueprint("main", __name__)
 
 ROM_EXTENSIONS = ["smc", "sfc"]
-n_threads = 0
-MAX_THREADS = 20
 
 @main_bp.route("/")
 def main_view():
@@ -47,22 +45,26 @@ def create_view():
         return create_error("Bad ROM Extension")
     # Check the number of threads
     db = get_db()
+    print(db)
     n_threads = db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()
+    print("N Threads: {}".format(int(n_threads[0])))
     # Error: Too many threads are running
     if int(n_threads[0]) >= current_app.config["MAX_THREADS"]:
         return create_error("Server is too busy")
     
     # If we get here, no errors
-    print(request.form)
+    #print(request.form)
     # First, set up the folder where we will process this request
     save_folder, save_name = rom_interact.setup_valid_rom(rom, request.form)
-    print(save_folder)
-    # Now, spawn a new process to randomize the rom
+    #print(save_folder)
+    # Now, spawn a new process to do the randomization and manage the files
+    rpath = current_app.config["RANDO_PATH"]
     work_t = current_app.config["WORK_TIME"]
     wait_t = current_app.config["WAIT_TIME"]
     err_t = current_app.config["ERR_TIME"]
     p = multiprocessing.Process(target=rom_interact.handle_valid_rom,
-            args=(request.form, save_folder, save_name, db, work_t, wait_t, err_t))
+            args=(rpath, request.form, save_folder, save_name, db, work_t, wait_t, err_t))
+    p.start()
     # Finally, render the template
     return render_template("create.html", folder=save_folder)
 
