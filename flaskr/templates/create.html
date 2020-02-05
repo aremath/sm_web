@@ -1,8 +1,29 @@
 {% extends "base.html" %}
+
 {% block wr_isactive %}active{% endblock %}
+
+{% block extrascripts %}
+    <script>
+        setInterval(function(){ sweep_links("/downloads/{{folder}}/rando.zip") }, 3000);
+    </script>
+{% endblock %}
+
 {% block content %}
 <h2> Super Metroid World Randomizer </h2>
 <p>
 This is the rando creation page!
 </p>
+<!-- TODO: Use something other than <input>? -->
+<div class="hidden">
+    <input type="text" value="{{folder}}">
+</div>
+<!-- TODO: Display a random .gif while things load -->
+<div class="dlnotready">
+    Download is not ready!
+</div>
+<div class="dlready">
+    Download is ready!
+    <a href="/downloads/{{folder}}/rando.zip">Download</a>
+</div>
 {% endblock %}
+

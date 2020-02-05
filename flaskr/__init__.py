@@ -7,6 +7,8 @@ def create_app(test_config=None):
             DATABASE = os.path.join(app.instance_path,"flaskr.sqlite"),
             # Path to door rando
             RANDO_PATH = "../../sm_rando/",
+            # Path from door rando to instance
+            REL_PATH = "../sm_flask/instance/",
             # Number of possible active threads
             MAX_THREADS = 20,
             # 3 minutes of work time

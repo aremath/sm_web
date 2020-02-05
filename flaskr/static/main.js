@@ -18,6 +18,7 @@ for (let accordion of accordions) {
 }
 
 // Prevent formsubmit using Enter
+// Since users will want to use Enter on textboxes
 document.getElementById("wr_settings").onkeypress = function (e) {
     var key = e.charCode || e.keyCode || 0;
     if (key == 13) {
@@ -104,4 +105,28 @@ window.onclick = function(e) {
             }
         }
     }
+}
+
+// Makes download links visible if not show
+function sweep_links(url) {
+    $.get(url)
+        .done(function() {
+            console.log("READY")
+            // Unhide everything that should display once the download is ready
+            var readys = document.getElementsByClassName("dlready");
+            for (let ready of readys) {
+                if (!ready.classList.contains("show")) {
+                    ready.classList.add("show");
+                }
+            }
+            // Hide everything that should display before the download is ready
+            var notreadys = document.getElementsByClassName("dlnotready");
+            for (let notready of notreadys) {
+                if (notready.classList.contains("show")) {
+                    notready.classList.remove("show");
+                }
+            }
+        }).fail(function() {
+            // Do nothing if the file wasn't found
+        })
 }

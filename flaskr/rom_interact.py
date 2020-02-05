@@ -4,6 +4,7 @@ import os, math, tempfile, json, signal, shutil, time, subprocess, sys
 from werkzeug.utils import secure_filename
 # Personal imports
 # Install github.com/aremath/sm_rando somewhere
+tempfile.tempdir = "../instance"
 
 class TimeoutError(Exception):
     pass
@@ -140,9 +141,9 @@ def setup_valid_rom(rom, request):
     rom.save(os.path.join(save_folder, save_name))
     return save_folder, save_name
 
-def handle_valid_rom(rando_path, form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
-    logfile = os.path.join(save_folder, "logfile")
+def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
     # Hijack stdout for output
+    logfile = os.path.join(save_folder, "logfile1")
     sys.stdout = open(logfile, "w")
 
     # Increment the number of threads
@@ -168,14 +169,18 @@ def handle_valid_rom(rando_path, form, save_folder, save_name, db, work_timeout,
             json.dump(item_placement, setfile)
 
         os.mkdir(os.path.join(save_folder, "output"))
+        # Relative save folder path for the rando alg
+        b = os.path.basename(save_folder)
+        rel_save_folder = os.path.join(rel_path, b)
+        rel_logfile = os.path.join(rel_save_folder, "logfile2")
         args = [
-                "--clean", os.path.join(save_folder, save_name),
-                "--create", os.path.join(save_folder, "output", "rando_rom.smc"),
+                "--clean", os.path.join(rel_save_folder, save_name),
+                "--create", os.path.join(rel_save_folder, "output", "rando_rom.smc"),
                 "--graph",
                 "--completable",
                 "--starting_items", starting_items,
                 "--settings", settings_dir,
-                "--logfile", logfile
+                "--logfile", rel_logfile
                 ]
         # Add other miscellanious flags
         seed = form["seed"]
@@ -202,6 +207,10 @@ def handle_valid_rom(rando_path, form, save_folder, save_name, db, work_timeout,
     #except Exception as e:
     #    print(e)
     #    error = "Unknown Error"
+
+    print("Done")
+    # Unset alarm
+    signal.alarm(0)
 
     # Wait part
     if error is None:

@@ -1,8 +1,8 @@
 # Python imports
-import multiprocessing
+import multiprocessing, os
 
 # Flask imports
-from flask import render_template, Blueprint, request, current_app, redirect, flash
+from flask import render_template, Blueprint, request, current_app, redirect, flash, send_from_directory
 
 # Local imports
 from . import config
@@ -59,15 +59,17 @@ def create_view():
     #print(save_folder)
     # Now, spawn a new process to do the randomization and manage the files
     rpath = current_app.config["RANDO_PATH"]
+    rel_path = current_app.config["REL_PATH"]
     work_t = current_app.config["WORK_TIME"]
     wait_t = current_app.config["WAIT_TIME"]
     err_t = current_app.config["ERR_TIME"]
     p = multiprocessing.Process(target=rom_interact.handle_valid_rom,
-            args=(rpath, request.form, save_folder, save_name, db, work_t, wait_t, err_t))
+            args=(rpath, rel_path, request.form, save_folder, save_name, db, work_t, wait_t, err_t))
     p.start()
     # Finally, render the template
-    return render_template("create.html", folder=save_folder)
+    return render_template("create.html", folder=os.path.basename(save_folder))
 
+#TODO: Do something with the flashed message
 def create_error(error):
     flash(error)
     return redirect(url_for("world_rando"))
@@ -75,4 +77,10 @@ def create_error(error):
 @main_bp.route("/rogue")
 def rogue_view():
     return render_template("rogue.html")
+
+@main_bp.route("/downloads/<path:directory>/<path:filename>", methods=["GET"])
+def download(directory, filename):
+    #print(directory)
+    #print(filename)
+    return send_from_directory(os.path.join("../instance/", directory), filename)
 
