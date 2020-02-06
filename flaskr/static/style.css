@@ -169,3 +169,22 @@ ul.navbar {
 .show {
     display: block;
 }
+
+.center-div
+{
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.errready {
+    display: none;
+}
+
+.dlready {
+    display: none;
+}
+
+.dlnotready {
+    display: block;
+}

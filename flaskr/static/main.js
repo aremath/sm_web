@@ -107,26 +107,37 @@ window.onclick = function(e) {
     }
 }
 
+function set_display_by_classname(classname, d) {
+    var elems = document.getElementsByClassName(classname);
+    for (let elem of elems) {
+        elem.style.display = d;
+    }
+}
+
 // Makes download links visible if not show
-function sweep_links(url) {
-    $.get(url)
+// Designed to be used with setInterval -- will clear itself when it is done making changes
+function sweep_links(done_url, error_url, intervalid) {
+    $.get(done_url)
         .done(function() {
-            console.log("READY")
             // Unhide everything that should display once the download is ready
-            var readys = document.getElementsByClassName("dlready");
-            for (let ready of readys) {
-                if (!ready.classList.contains("show")) {
-                    ready.classList.add("show");
-                }
-            }
+            set_display_by_classname("dlready", "block");
             // Hide everything that should display before the download is ready
-            var notreadys = document.getElementsByClassName("dlnotready");
-            for (let notready of notreadys) {
-                if (notready.classList.contains("show")) {
-                    notready.classList.remove("show");
-                }
-            }
+            set_display_by_classname("dlnotready", "none");
+            clearInterval(intervalid);
         }).fail(function() {
             // Do nothing if the file wasn't found
-        })
+        });
+    $.get(error_url)
+        .done(function(data) {
+            // Unhide everything that should display if there was an error
+            set_display_by_classname("errready", "block");
+            // Hide everything that should display before the download is ready
+            set_display_by_classname("dlnotready", "none");
+            clearInterval(intervalid);
+            // Set the html of the error p element
+            document.getElementById("errorp").innerHTML = data;
+        }, "text").fail(function() {
+            // Do nothing if the file wasn't found
+        });
 }
+

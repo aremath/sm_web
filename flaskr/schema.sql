@@ -6,3 +6,4 @@ CREATE TABLE requests (
 );
 
 INSERT INTO requests(key, value) VALUES("n", 0);
+INSERT INTO requests(key, value) VALUES("k", 0);

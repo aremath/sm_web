@@ -4,26 +4,24 @@
 
 {% block extrascripts %}
     <script>
-        setInterval(function(){ sweep_links("/downloads/{{folder}}/rando.zip") }, 3000);
+        var link_interval = setInterval(function(){
+            sweep_links("/downloads/{{folder}}/done.txt", "/downloads/{{folder}}/error.txt", link_interval);
+        }, 3000);
     </script>
 {% endblock %}
 
 {% block content %}
-<h2> Super Metroid World Randomizer </h2>
-<p>
-This is the rando creation page!
-</p>
-<!-- TODO: Use something other than <input>? -->
-<div class="hidden">
-    <input type="text" value="{{folder}}">
+<div class="dlnotready center-div">
+    <p> Generating ROM File. Please wait. </p>
+    <!-- Display a random .gif while things generate -->
+    <img src="/gif/random">
 </div>
-<!-- TODO: Display a random .gif while things load -->
-<div class="dlnotready">
-    Download is not ready!
+<div class="dlready center-div">
+    <p> Download is ready! This link will be valid for {{link_time}} minutes.</p>
+    <a href="/downloads/{{folder}}/rando.zip">Download Randomized ROM</a>
 </div>
-<div class="dlready">
-    Download is ready!
-    <a href="/downloads/{{folder}}/rando.zip">Download</a>
+<div class="errready center-div">
+    <p id="errorp" style="color: red"></p>
 </div>
 {% endblock %}
 

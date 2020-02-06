@@ -9,9 +9,7 @@
 {% block content %}
 <h2> Super Metroid World Randomizer </h2>
 <p>
-    Randomize the doors in Super Metroid, with logic to make sure that you can actually beat the game. The randomizer is backtracking, meaning that doors will take you back where you came from. Have fun!
-
-    This is the rando page TODO
+If you get stuck, you can press Start+Select to warp back to Samus' Ship.
 </p>
 
 <form id="wr_settings" action="/world_rando/create" method="POST" enctype="multipart/form-data">
@@ -58,7 +56,7 @@
     </fieldset>
 
     <fieldset>
-        <legend>Misc:</legend>
+        <legend>Misc</legend>
         <input type="checkbox" id="g8" name="g8"> Two Statues Rooms
         <input type="checkbox" id="noescape" name="noescape"> No teleport during escape </br>
         Logic Type:<br>
@@ -141,6 +139,14 @@
     <input type="text" name="seed"><br>
     <input type="submit" value="Create!">
 </form>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red">{{message}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 </div>
 

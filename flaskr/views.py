@@ -1,8 +1,8 @@
 # Python imports
-import multiprocessing, os
+import multiprocessing, os, random
 
 # Flask imports
-from flask import render_template, Blueprint, request, current_app, redirect, flash, send_from_directory
+from flask import render_template, Blueprint, request, current_app, redirect, flash, send_from_directory, send_file, url_for
 
 # Local imports
 from . import config
@@ -32,7 +32,7 @@ def create_view():
     if request.method != "POST":
         return create_error("Not a POST")
     user_conf = request.form
-    print(request.files)
+    #print(request.files)
     # Error: They didn't upload a ROM
     if "ROM" not in request.files:
         return create_error("No ROM")
@@ -45,10 +45,13 @@ def create_view():
         return create_error("Bad ROM Extension")
     # Check the number of threads
     db = get_db()
-    print(db)
-    n_threads = db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()
+    n_folders = db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()
+    print("N Folders: {}".format(int(n_folders[0])))
+    # Error: Too many threads currently sleeping
+    if int(n_folders[0]) >= current_app.config["MAX_FOLDERS"]:
+        return create_error("Server is too busy")
+    n_threads = db.execute("SELECT value FROM requests WHERE key = \"k\"").fetchone()
     print("N Threads: {}".format(int(n_threads[0])))
-    # Error: Too many threads are running
     if int(n_threads[0]) >= current_app.config["MAX_THREADS"]:
         return create_error("Server is too busy")
     
@@ -66,13 +69,14 @@ def create_view():
     p = multiprocessing.Process(target=rom_interact.handle_valid_rom,
             args=(rpath, rel_path, request.form, save_folder, save_name, db, work_t, wait_t, err_t))
     p.start()
+    wait_m = wait_t // 60
     # Finally, render the template
-    return render_template("create.html", folder=os.path.basename(save_folder))
+    return render_template("create.html", folder=os.path.basename(save_folder), link_time = wait_m)
 
 #TODO: Do something with the flashed message
 def create_error(error):
     flash(error)
-    return redirect(url_for("world_rando"))
+    return redirect("/world_rando")
 
 @main_bp.route("/rogue")
 def rogue_view():
@@ -83,4 +87,10 @@ def download(directory, filename):
     #print(directory)
     #print(filename)
     return send_from_directory(os.path.join("../instance/", directory), filename)
+
+@main_bp.route("/gif/random", methods=["GET"])
+def gif():
+    gifdir = "./static/gif"
+    gifs = os.listdir(gifdir)
+    return send_file(os.path.join(gifdir, random.choice(gifs)))
 

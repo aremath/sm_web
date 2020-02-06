@@ -146,11 +146,12 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
     logfile = os.path.join(save_folder, "logfile1")
     sys.stdout = open(logfile, "w")
 
-    # Increment the number of threads
+    # Increment the number of folders and threads (respectively)
     if db is not None:
         #n_threads = int(db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()[0])
         #print("T-N Threads: {}".format(n_threads))
         db.execute("UPDATE requests SET value = value + 1 WHERE key = \"n\"")
+        db.execute("UPDATE requests SET value = value + 1 WHERE key = \"k\"")
         db.commit()
         #n_threads = int(db.execute("SELECT value FROM requests WHERE key = \"n\"").fetchone()[0])
         #print("T-N Threads: {}".format(n_threads))
@@ -199,14 +200,21 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
         #TODO: timeout?
         returncode = subprocess.call(command, cwd=rando_path)
         if returncode < 0:
-            error = "Shell error number {}".format(a)
+            error = "Error: Shell error {}".format(a)
     except TimeoutError:
-        error = "Timed Out"
+        error = "Error: ROM generation timed out."
     except AssertionError:
-        error = "Asserted"
+        error = "Error: Assertion Error."
     #except Exception as e:
     #    print(e)
     #    error = "Unknown Error"
+
+    # Decrement the number of threads
+    # This thread no longer needs resources since it is no longer generating
+    # So it does not count towards the limit
+    if db is not None:
+        db.execute("UPDATE requests SET value = value - 1 WHERE key = \"k\"")
+        db.commit()
 
     print("Done")
     # Unset alarm
@@ -224,7 +232,7 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
         # Wait for the wait timeout
         time.sleep(wait_timeout)
     else:
-        print("Error: {}".format(error))
+        print(error)
         # Create error.txt
         e_path = os.path.join(save_folder, "error.txt")
         with open(e_path, "w") as f:
@@ -234,7 +242,7 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
     # Clean up
     # Delete the directory
     shutil.rmtree(save_folder)
-    # Decrement the number of threads
+    # Decrement the number of folders
     if db is not None:
         db.execute("UPDATE requests SET value = value - 1 WHERE key = \"n\"")
         db.commit()
