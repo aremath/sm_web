@@ -11,7 +11,7 @@ def create_app(test_config=None):
             # Path from door rando to instance
             REL_PATH = "../sm_flask/instance/",
             # Number of possible active generation threads
-            MAX_THREADS = 0,
+            MAX_THREADS = 10,
             # Number of possible folders (sleeping threads)
             MAX_FOLDERS = 40,
             # 3 minutes of work time
