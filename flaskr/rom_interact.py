@@ -2,8 +2,6 @@
 import os, math, tempfile, json, signal, shutil, time, subprocess, sys
 # Flask imports
 from werkzeug.utils import secure_filename
-# Personal imports
-# Install github.com/aremath/sm_rando somewhere
 tempfile.tempdir = "../instance"
 
 class TimeoutError(Exception):
@@ -144,6 +142,7 @@ def setup_valid_rom(rom, request):
 def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, work_timeout, wait_timeout, err_timeout):
     # Hijack stdout for output
     logfile = os.path.join(save_folder, "logfile1")
+    print(os.getcwd())
     sys.stdout = open(logfile, "w")
 
     # Increment the number of folders and threads (respectively)
@@ -195,7 +194,8 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
             args.append("--g8")
         # Actually call the thing
         #TODO: in the future, update directory structure to be able to import this file
-        command = ["python3", "door_rando_main.py"] + args
+        # Make the call to door rando more nice
+        command = ["nice", "-n", "15", "python3", "door_rando_main.py"] + args
         print(command)
         #TODO: timeout?
         returncode = subprocess.call(command, cwd=rando_path)

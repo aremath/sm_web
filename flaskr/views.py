@@ -71,7 +71,8 @@ def create_view():
     p.start()
     wait_m = wait_t // 60
     # Finally, render the template
-    return render_template("create.html", folder=os.path.basename(save_folder), link_time = wait_m)
+    r = render_template("create.html", folder=os.path.basename(save_folder), link_time = wait_m)
+    return r
 
 #TODO: Do something with the flashed message
 def create_error(error):
@@ -90,7 +91,7 @@ def download(directory, filename):
 
 @main_bp.route("/gif/random", methods=["GET"])
 def gif():
-    gifdir = "./static/gif"
+    gifdir = current_app.config["GIF_DIR"]
     gifs = os.listdir(gifdir)
     return send_file(os.path.join(gifdir, random.choice(gifs)))
 

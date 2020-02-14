@@ -19,7 +19,9 @@ def create_app(test_config=None):
             # 10 minutes of wait time
             WAIT_TIME = 600,
             # 1 minute of error time
-            ERR_TIME = 60
+            ERR_TIME = 60,
+            TEMP_DIR = "../instance",
+            GIF_DIR = "static/gif"
             )
     # If this file exists, use it to override secret_key
     app.config.from_pyfile("app_config.py", silent=True)
@@ -39,5 +41,8 @@ def create_app(test_config=None):
 
     from . import database
     database.init_app(app)
+
+    import tempfile
+    tempfile.tempdir = app.config["TEMP_DIR"]
 
     return app

@@ -134,14 +134,13 @@ ul.navbar {
     outline: none;
     color: black;
     padding: 14px 16px;
-    /* background-color: inherit; */
-    background-color: #99c2ff;
+    background-color: inherit;
     font-family: inherit;
     margin: 0;
 }
 
-.dropdown .dropbtn:hover, .dropbtn:focus {
-    background-color: #66a3ff;
+.dropdown .dropbtn:focus {
+    background-color: #c3c3c3;
 }
 
 .dropdown-content {
