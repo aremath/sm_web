@@ -192,6 +192,8 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
             args.append("--noescape")
         if "g8" in form:
             args.append("--g8")
+        if "doubleboss" in form:
+            args.append("--doubleboss")
         # Actually call the thing
         #TODO: in the future, update directory structure to be able to import this file
         # Make the call to door rando more nice
