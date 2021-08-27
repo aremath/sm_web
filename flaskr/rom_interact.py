@@ -156,6 +156,7 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
         #print("T-N Threads: {}".format(n_threads))
 
     error = None
+    print("hello")
 
     # Work part
     signal.signal(signal.SIGALRM, timeout_handler)
@@ -173,13 +174,14 @@ def handle_valid_rom(rando_path, rel_path, form, save_folder, save_name, db, wor
         b = os.path.basename(save_folder)
         rel_save_folder = os.path.join(rel_path, b)
         rel_logfile = os.path.join(rel_save_folder, "logfile2")
+        rel_settings = os.path.join(rel_save_folder, "settings")
         args = [
                 "--clean", os.path.join(rel_save_folder, save_name),
                 "--create", os.path.join(rel_save_folder, "output", "rando_rom.smc"),
                 "--graph",
                 "--completable",
                 "--starting_items", starting_items,
-                "--settings", settings_dir,
+                "--settings", rel_settings,
                 "--logfile", rel_logfile
                 ]
         # Add other miscellanious flags
